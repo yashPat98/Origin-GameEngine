@@ -1,0 +1,3 @@
+#include "../include/OriginResources.h"
+
+ORIGIN_ICON ICON Origin.ico

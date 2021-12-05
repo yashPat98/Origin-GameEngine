@@ -1,0 +1,16 @@
+LIBRARY Origin.dll
+EXPORTS
+    exec
+    CreateLogger
+    DeleteLogger
+    CreateShader
+    DeleteShader
+    CreateProgram
+    DeleteProgram
+    CreateBuffer
+    DeleteBuffer
+    CreateVertexArray
+    DeleteVertexArray
+    CreateTexture
+    DeleteTexture
+
