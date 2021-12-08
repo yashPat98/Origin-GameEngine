@@ -292,6 +292,7 @@
   <ItemGroup>
     <ClCompile Include="include\glm\detail\glm.cpp" />
     <ClCompile Include="src\Core\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\Core\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Core\OpenGLProgram.cpp" />
     <ClCompile Include="src\Core\OpenGLShader.cpp" />
     <ClCompile Include="src\Core\OpenGLTexture.cpp" />
@@ -603,6 +604,7 @@
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="include\OpenGLBuffer.h" />
+    <ClInclude Include="include\OpenGLFramebuffer.h" />
     <ClInclude Include="include\OpenGLProgram.h" />
     <ClInclude Include="include\OpenGLShader.h" />
     <ClInclude Include="include\OpenGLTexture.h" />

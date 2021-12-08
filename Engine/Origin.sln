@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Origin", "Origin.vcxproj", "{C24EE53C-E81A-4D4D-A2A6-72B07775D61C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OriginGame", "..\OriginGame\OriginGame.vcxproj", "{B0FFB5A7-9B1E-43A9-9724-94D290D4F843}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OriginGame", "..\Test\OriginGame.vcxproj", "{B0FFB5A7-9B1E-43A9-9724-94D290D4F843}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -487,6 +487,9 @@
     <ClCompile Include="include\glm\detail\glm.cpp">
       <Filter>Header Files\glm\detail</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\OpenGLFramebuffer.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\OriginResources.rc">
@@ -1412,6 +1415,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OpenGLFramebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

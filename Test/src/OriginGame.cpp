@@ -172,7 +172,7 @@ void Scene::initialize(void)
     smiley_texture = OpenGLTexture::CreateTexture(GL_TEXTURE_2D);
     smiley_texture->setTextureParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     smiley_texture->setTextureParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    smiley_texture->loadTexture("textures/Smiley.bmp");
+    smiley_texture->loadTexture("textures/Smiley.png");
 
     // release shaders
     OpenGLShader::DeleteShader(vertexShader);
@@ -277,7 +277,6 @@ void Scene::uninitialize(void)
     OpenGLVertexArray::DeleteVertexArray(cube);
 }
 
-
 void Scene::imgui_uninitialize(void)
 {
     // code
@@ -285,3 +284,4 @@ void Scene::imgui_uninitialize(void)
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 }
+
