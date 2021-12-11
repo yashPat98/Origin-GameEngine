@@ -24,6 +24,9 @@ class Texture : public origin::OpenGLTexture
         GLint m_border;
         GLenum m_format;
 
+        GLuint getTextureObject(void);
+        GLint getMipmapLevel(void);
+
 	public:
 		// constructors
 		Texture(GLenum target);
@@ -117,6 +120,18 @@ void Texture::setTextureParameter(GLenum pname, GLfloat param)
     this->unbind();
 }
 
+GLuint Texture::getTextureObject(void)
+{
+    // code
+    return (m_textureObject);
+}
+
+GLint Texture::getMipmapLevel(void)
+{
+    // code
+    return (m_mipmapLevel);
+}
+
 void Texture::loadTexture(const char* filename)
 {
     // variable declarations
@@ -143,8 +158,10 @@ void Texture::loadTexture(const char* filename)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     this->bind();
+
     glTexImage2D(m_target, m_mipmapLevel, m_internalFormat, m_width, m_height, m_border, m_format, GL_UNSIGNED_BYTE, (const void*)pixel_data);
     glGenerateMipmap(m_target);
+    
     this->unbind();
 
     stbi_image_free(pixel_data);
@@ -155,8 +172,11 @@ void Texture::loadTexture(const void* data, GLenum type)
 {
     // code
     this->bind();
+    
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(m_target, m_mipmapLevel, m_internalFormat, m_width, m_height, m_border, m_format, type, data);
     glGenerateMipmap(m_target);
+    
     this->unbind();
 }
 

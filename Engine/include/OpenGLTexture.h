@@ -27,7 +27,11 @@ namespace origin
             virtual void loadTexture(const void* data, GLenum type)         = 0;
             
             virtual void bind(GLenum textureUnit)                           = 0;
+            virtual void bind(void)                                         = 0;
             virtual void unbind(void)                                       = 0;
+
+            virtual GLuint getTextureObject(void)                           = 0;
+            virtual GLint getMipmapLevel(void)                              = 0;
 
             // static member functions
             static OpenGLTexture* CreateTexture(GLenum target);

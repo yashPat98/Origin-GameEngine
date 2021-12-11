@@ -13,6 +13,7 @@ class Scene : public OriginApplication
         OpenGLBuffer       *cube_position_buffer;
         OpenGLBuffer       *cube_color_buffer;
         OpenGLTexture      *smiley_texture;
+        OpenGLFramebuffer  *framebuffer;
 
         GLuint              mvpMatrixUniform;  
         GLuint              textureUniform;
@@ -174,10 +175,16 @@ void Scene::initialize(void)
     smiley_texture->setTextureParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     smiley_texture->loadTexture("textures/Smiley.png");
 
+    // framebuffer configurations
+    framebuffer = OpenGLFramebuffer::CreateFramebuffer();
+    framebuffer->attach(GL_COLOR_ATTACHMENT0, smiley_texture);
+    framebuffer->attach(GL_DEPTH_ATTACHMENT, GL_DEPTH, 1024, 1024);
+    framebuffer->attach(GL_STENCIL_ATTACHMENT, GL_STENCIL, 1024, 1024);
+
     // release shaders
     OpenGLShader::DeleteShader(vertexShader);
     OpenGLShader::DeleteShader(fragmentShader);
-}
+}  
 
 void Scene::imgui_initialize(HWND hwnd)
 {
@@ -270,6 +277,7 @@ void Scene::imgui_render(void)
 void Scene::uninitialize(void)
 {
     // code
+    OpenGLFramebuffer::DeleteFramebuffer(framebuffer);
     OpenGLProgram::DeleteProgram(colored_shader);
     OpenGLTexture::DeleteTexture(smiley_texture);
     OpenGLBuffer::DeleteBuffer(cube_position_buffer);

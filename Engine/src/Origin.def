@@ -13,4 +13,6 @@ EXPORTS
     DeleteVertexArray
     CreateTexture
     DeleteTexture
+    CreateFramebuffer
+    DeleteFramebuffer
 

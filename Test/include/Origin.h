@@ -33,5 +33,6 @@
 #include <OpenGLBuffer.h>
 #include <OpenGLVertexArray.h>
 #include <OpenGLTexture.h>
+#include <OpenGLFramebuffer.h>
 
 #endif /* _ORIGIN_ */
