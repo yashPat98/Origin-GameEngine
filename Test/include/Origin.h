@@ -6,6 +6,7 @@
 #include <fstream>
 #include <ctime>
 #include <string>
+#include <vector>
 
 // opengl headers
 #include <gl/glew.h>
@@ -34,5 +35,10 @@
 #include <OpenGLVertexArray.h>
 #include <OpenGLTexture.h>
 #include <OpenGLFramebuffer.h>
+
+// graphics headers
+#include <ScreenQuad.h>
+// #include <MSAA.h>
+#include <BlinnPhongModel.h>
 
 #endif /* _ORIGIN_ */

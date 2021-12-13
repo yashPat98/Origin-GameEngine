@@ -37,6 +37,15 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{d4bc0cb1-42d1-49a4-b207-c77b9c72b8b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\shaders">
+      <UniqueIdentifier>{380c5c8f-c9df-4a80-9f58-54a865f1eee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shaders\BlinnPhong">
+      <UniqueIdentifier>{6d77ea7c-5fbf-47db-a9cc-d85c49cc2312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shaders\ScreenQuad">
+      <UniqueIdentifier>{24d05147-f0db-4a26-85ed-31dfd4f54273}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\OpenGLBuffer.h">
@@ -954,6 +963,9 @@
     <ClInclude Include="include\OpenGLFramebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\BlinnPhongModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\glm\detail\func_common.inl">
@@ -1378,6 +1390,18 @@
     </None>
     <None Include="shaders\colored.vs">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="include\shaders\BlinnPhong\BlinnPhong.fs">
+      <Filter>Header Files\shaders\BlinnPhong</Filter>
+    </None>
+    <None Include="include\shaders\BlinnPhong\BlinnPhong.vs">
+      <Filter>Header Files\shaders\BlinnPhong</Filter>
+    </None>
+    <None Include="include\shaders\ScreenQuad\ScreenQuad.fs">
+      <Filter>Header Files\shaders\ScreenQuad</Filter>
+    </None>
+    <None Include="include\shaders\ScreenQuad\ScreenQuad.vs">
+      <Filter>Header Files\shaders\ScreenQuad</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

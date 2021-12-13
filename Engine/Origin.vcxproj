@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -288,6 +288,10 @@
     <None Include="include\glm\gtx\vector_angle.inl" />
     <None Include="include\glm\gtx\vector_query.inl" />
     <None Include="include\glm\gtx\wrap.inl" />
+    <None Include="include\shaders\BlinnPhong\BlinnPhong.fs" />
+    <None Include="include\shaders\BlinnPhong\BlinnPhong.vs" />
+    <None Include="include\shaders\ScreenQuad\ScreenQuad.fs" />
+    <None Include="include\shaders\ScreenQuad\ScreenQuad.vs" />
     <None Include="src\Origin.def" />
   </ItemGroup>
   <ItemGroup>
@@ -300,6 +304,8 @@
     <ClCompile Include="src\Core\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Core\OriginApplication.cpp" />
     <ClCompile Include="src\Core\OriginLogger.cpp" />
+    <ClCompile Include="src\Graphics\BlinnPhongModel.cpp" />
+    <ClCompile Include="src\Graphics\ScreenQuad.cpp" />
     <ClCompile Include="src\Origin.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -604,6 +610,7 @@
     <ClInclude Include="include\imgui\imstb_rectpack.h" />
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
+    <ClInclude Include="include\MSAA.h" />
     <ClInclude Include="include\OpenGLBuffer.h" />
     <ClInclude Include="include\OpenGLFramebuffer.h" />
     <ClInclude Include="include\OpenGLProgram.h" />
@@ -614,6 +621,8 @@
     <ClInclude Include="include\OriginApplication.h" />
     <ClInclude Include="include\OriginLogger.h" />
     <ClInclude Include="include\OriginResources.h" />
+    <ClInclude Include="include\BlinnPhongModel.h" />
+    <ClInclude Include="include\ScreenQuad.h" />
     <ClInclude Include="include\stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

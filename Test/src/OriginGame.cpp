@@ -8,12 +8,15 @@ class Scene : public OriginApplication
 {
     private:     
         OpenGLProgram      *colored_shader;  
+        BlinnPhongModel    *blinnPhongModel;
 
         OpenGLVertexArray  *cube;
         OpenGLBuffer       *cube_position_buffer;
         OpenGLBuffer       *cube_color_buffer;
         OpenGLTexture      *smiley_texture;
         OpenGLFramebuffer  *framebuffer;
+        OpenGLTexture      *fbo_texture;
+        ScreenQuad         *screen;
 
         GLuint              mvpMatrixUniform;  
         GLuint              textureUniform;
@@ -63,6 +66,9 @@ void Scene::initialize(void)
     mvpMatrixUniform = colored_shader->getUniformLocation("mvpMatrix");
     textureUniform = colored_shader->getUniformLocation("textureSampler");
 
+    blinnPhongModel = BlinnPhongModel::InitializeBlinnPhongModel();
+    screen = ScreenQuad::CreateScreenQuad();
+
     // vertex data
     const GLfloat cubeVertices[] = 
     {
@@ -103,43 +109,43 @@ void Scene::initialize(void)
         -1.0f, -1.0f, 1.0f
     };
 
-    const GLfloat cubeTexcoords[] =
+    const GLfloat cubeNormals[] =
     {
-        // near
-        1.0f, 1.0f,
-        0.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
+        //near 
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,
 
-        // right
-        1.0f, 1.0f,
-        0.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
+        //right
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
 
-        // far 
-        1.0f, 1.0f,
-        0.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
+        //far
+        0.0f, 0.0f, -1.0f,
+        0.0f, 0.0f, -1.0f,
+        0.0f, 0.0f, -1.0f,
+        0.0f, 0.0f, -1.0f,
 
         //left
-        1.0f, 1.0f,
-        0.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
+        -1.0f, 0.0f, 0.0f,
+        -1.0f, 0.0f, 0.0f,
+        -1.0f, 0.0f, 0.0f,
+        -1.0f, 0.0f, 0.0f,
 
-        // top
-        1.0f, 1.0f,
-        0.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
+        //top 
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
 
-        // bottom
-        1.0f, 1.0f,
-        0.0f, 1.0f,
-        0.0f, 0.0f,
-        1.0f, 0.0f,
+        //bottom
+        0.0f, -1.0f, 0.0f,
+        0.0f, -1.0f, 0.0f,
+        0.0f, -1.0f, 0.0f,
+        0.0f, -1.0f, 0.0f
     };
 
     // setup vao and vbo
@@ -148,12 +154,12 @@ void Scene::initialize(void)
     cube_color_buffer           = OpenGLBuffer::CreateBuffer();
 
     cube_position_buffer->setBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-    cube_color_buffer->setBufferData(GL_ARRAY_BUFFER, sizeof(cubeTexcoords), cubeTexcoords, GL_STATIC_DRAW);
+    cube_color_buffer->setBufferData(GL_ARRAY_BUFFER, sizeof(cubeNormals), cubeNormals, GL_STATIC_DRAW);
 
     cube->setVertexBuffer(cube_position_buffer);
     cube->setVertexAttribPointer(ORIGIN_ATTRIBUTE_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     cube->setVertexBuffer(cube_color_buffer);
-    cube->setVertexAttribPointer(ORIGIN_ATTRIBUTE_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+    cube->setVertexAttribPointer(ORIGIN_ATTRIBUTE_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // opengl states
     glShadeModel(GL_SMOOTH);                  
@@ -166,7 +172,7 @@ void Scene::initialize(void)
 
     // initialize variables
     projectionMatrix = mat4(1.0);
-    translation = vec3(0.0f, 0.0f, -6.0f);
+    translation = vec3(0.0f, 0.0f, -10.0f);
     rotation = vec3(0.0f, 0.0f, 0.0f);
 
     // load textures
@@ -177,9 +183,17 @@ void Scene::initialize(void)
 
     // framebuffer configurations
     framebuffer = OpenGLFramebuffer::CreateFramebuffer();
-    framebuffer->attach(GL_COLOR_ATTACHMENT0, smiley_texture);
-    framebuffer->attach(GL_DEPTH_ATTACHMENT, GL_DEPTH, 1024, 1024);
-    framebuffer->attach(GL_STENCIL_ATTACHMENT, GL_STENCIL, 1024, 1024);
+    fbo_texture = OpenGLTexture::CreateTexture(GL_TEXTURE_2D);
+
+    fbo_texture->setInternalFormat(GL_RGBA);
+    fbo_texture->setFormat(GL_RGBA);
+    fbo_texture->setSize(1920, 1080);
+    fbo_texture->loadTexture(NULL, GL_UNSIGNED_BYTE);
+    fbo_texture->setTextureParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    fbo_texture->setTextureParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    framebuffer->attach(GL_COLOR_ATTACHMENT0, fbo_texture);
+    framebuffer->attach(GL_DEPTH_STENCIL_ATTACHMENT, GL_DEPTH24_STENCIL8, 1920, 1080);
 
     // release shaders
     OpenGLShader::DeleteShader(vertexShader);
@@ -223,23 +237,33 @@ void Scene::resize(int width, int height)
 void Scene::render(void)
 {
     //variable declarations
-    mat4 modelViewMatrix(1.0f);
-    mat4 modelViewProjectionMatrix(1.0f);
+    mat4 modelMatrix(1.0f);
+    mat4 viewMatrix(1.0f);
 
     //code
+    framebuffer->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    colored_shader->bind();
+    blinnPhongModel->bind();
 
-        modelViewMatrix = translate(modelViewMatrix, translation);
-        modelViewMatrix = rotate(modelViewMatrix, radians(rotation.x), vec3(1.0f, 0.0f, 0.0f));
-        modelViewMatrix = rotate(modelViewMatrix, radians(rotation.y), vec3(0.0f, 1.0f, 0.0f));
-        modelViewMatrix = rotate(modelViewMatrix, radians(rotation.z), vec3(0.0f, 0.0f, 1.0f));
-        modelViewProjectionMatrix = projectionMatrix * modelViewMatrix;
-        glUniformMatrix4fv(mvpMatrixUniform, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+        modelMatrix = translate(modelMatrix, translation);
+        modelMatrix = rotate(modelMatrix, radians(rotation.x), vec3(1.0f, 0.0f, 0.0f));
+        modelMatrix = rotate(modelMatrix, radians(rotation.y), vec3(0.0f, 1.0f, 0.0f));
+        modelMatrix = rotate(modelMatrix, radians(rotation.z), vec3(0.0f, 0.0f, 1.0f));
 
-        smiley_texture->bind(GL_TEXTURE0);
-        glUniform1i(textureUniform, 0);
+        blinnPhongModel->setModelMatrix(modelMatrix);
+        blinnPhongModel->setViewMatrix(viewMatrix);
+        blinnPhongModel->setProjectionMatrix(projectionMatrix);
+
+        blinnPhongModel->setLightAmbient(vec3(0.1f, 0.1f, 0.1f));
+        blinnPhongModel->setLightDiffuse(vec3(1.0f, 1.0f, 1.0f));
+        blinnPhongModel->setLightSpecular(vec3(1.0f, 1.0f, 1.0f));
+        blinnPhongModel->setLightPosition(vec4(100.0f, 100.0f, 100.0f, 1.0f));
+
+        blinnPhongModel->setMaterialAmbient(vec3(0.2f, 0.1f, 0.0f));
+        blinnPhongModel->setMaterialDiffuse(vec3(1.0f, 0.5f, 0.0f));
+        blinnPhongModel->setMaterialSpecular(vec3(1.0f, 0.5f, 0.0f));
+        blinnPhongModel->setMaterialShininess(128.0f);
 
         cube->drawArrays(GL_TRIANGLE_FAN, 0, 4);
         cube->drawArrays(GL_TRIANGLE_FAN, 4, 4);
@@ -248,9 +272,13 @@ void Scene::render(void)
         cube->drawArrays(GL_TRIANGLE_FAN, 16, 4);
         cube->drawArrays(GL_TRIANGLE_FAN, 20, 4);
 
-        smiley_texture->unbind();
+    blinnPhongModel->unbind();
+    framebuffer->unbind();
 
-    colored_shader->unbind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    screen->renderToScreen(fbo_texture);
+
 }
 
 void Scene::update(void)
@@ -277,6 +305,9 @@ void Scene::imgui_render(void)
 void Scene::uninitialize(void)
 {
     // code
+    delete (screen);
+    delete (fbo_texture);
+    BlinnPhongModel::DeleteBlinnPhongModel(blinnPhongModel);
     OpenGLFramebuffer::DeleteFramebuffer(framebuffer);
     OpenGLProgram::DeleteProgram(colored_shader);
     OpenGLTexture::DeleteTexture(smiley_texture);

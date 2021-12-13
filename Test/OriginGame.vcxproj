@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\BlinnPhongModel.h" />
     <ClInclude Include="include\glm\common.hpp" />
     <ClInclude Include="include\glm\detail\compute_common.hpp" />
     <ClInclude Include="include\glm\detail\compute_vector_relational.hpp" />
@@ -588,6 +589,10 @@
     <None Include="include\glm\gtx\vector_angle.inl" />
     <None Include="include\glm\gtx\vector_query.inl" />
     <None Include="include\glm\gtx\wrap.inl" />
+    <None Include="include\shaders\BlinnPhong\BlinnPhong.fs" />
+    <None Include="include\shaders\BlinnPhong\BlinnPhong.vs" />
+    <None Include="include\shaders\ScreenQuad\ScreenQuad.fs" />
+    <None Include="include\shaders\ScreenQuad\ScreenQuad.vs" />
     <None Include="shaders\colored.fs" />
     <None Include="shaders\colored.vs" />
   </ItemGroup>

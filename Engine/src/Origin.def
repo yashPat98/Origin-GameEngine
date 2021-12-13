@@ -15,4 +15,8 @@ EXPORTS
     DeleteTexture
     CreateFramebuffer
     DeleteFramebuffer
+    InitializeBlinnPhongModel
+    DeleteBlinnPhongModel
+    CreateScreenQuad
+    DeleteScreenQuad
 

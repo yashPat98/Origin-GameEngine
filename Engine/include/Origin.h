@@ -36,4 +36,9 @@
 #include <OpenGLTexture.h>
 #include <OpenGLFramebuffer.h>
 
+// graphics headers
+#include <ScreenQuad.h>
+#include <MSAA.h>
+#include <BlinnPhongModel.h>
+
 #endif /* _ORIGIN_ */

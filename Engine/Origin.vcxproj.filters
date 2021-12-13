@@ -36,6 +36,18 @@
     <Filter Include="Header Files\imgui">
       <UniqueIdentifier>{c96daea9-63d1-4aa4-93c3-1d5dbcd23e50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{e7f44c03-5e68-43c2-b34c-fd1b8ea60727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shaders">
+      <UniqueIdentifier>{f044f28f-860e-40a7-8bef-d63e437f69ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shaders\BlinnPhong">
+      <UniqueIdentifier>{2449513a-5f0c-409e-8ba2-39380c0e3a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shaders\ScreenQuad">
+      <UniqueIdentifier>{02f472ed-1249-4286-a414-a0e09200b56f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Origin.def">
@@ -458,6 +470,18 @@
     <None Include="include\glm\gtx\wrap.inl">
       <Filter>Header Files\glm\gtx</Filter>
     </None>
+    <None Include="include\shaders\BlinnPhong\BlinnPhong.fs">
+      <Filter>Header Files\shaders\BlinnPhong</Filter>
+    </None>
+    <None Include="include\shaders\BlinnPhong\BlinnPhong.vs">
+      <Filter>Header Files\shaders\BlinnPhong</Filter>
+    </None>
+    <None Include="include\shaders\ScreenQuad\ScreenQuad.fs">
+      <Filter>Header Files\shaders\ScreenQuad</Filter>
+    </None>
+    <None Include="include\shaders\ScreenQuad\ScreenQuad.vs">
+      <Filter>Header Files\shaders\ScreenQuad</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Origin.cpp">
@@ -489,6 +513,12 @@
     </ClCompile>
     <ClCompile Include="src\Core\OpenGLFramebuffer.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\BlinnPhongModel.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\ScreenQuad.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1418,6 +1448,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\OpenGLFramebuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BlinnPhongModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MSAA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScreenQuad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
