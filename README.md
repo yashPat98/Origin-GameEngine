@@ -8,6 +8,7 @@ The Engine Supports following features (Wrappers)
 * Support for GLSL shaders.
 * Support for vertex array object and vertex buffer object setup.
 * Support for texture loading.
+* MSAA
 
 # Screenshots
 
