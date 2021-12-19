@@ -24,6 +24,7 @@ class CScreenQuad : public origin::ScreenQuad
 
 		// non-static member functions
 	    void renderToScreen(origin::OpenGLTexture* texture);
+		void renderToScreen(GLuint texture);
 };
 
 // ---------------------------------------------------
@@ -87,6 +88,20 @@ void CScreenQuad::renderToScreen(origin::OpenGLTexture* texture)
 	m_shaderProgram->bind();
 		
 		texture->bind(GL_TEXTURE0);
+		glUniform1i(m_shaderProgram->getUniformLocation("u_texture"), 0);
+
+		m_vao->drawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+	m_shaderProgram->unbind();
+}
+
+void CScreenQuad::renderToScreen(GLuint texture)
+{
+	// code
+	m_shaderProgram->bind();
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
 		glUniform1i(m_shaderProgram->getUniformLocation("u_texture"), 0);
 
 		m_vao->drawArrays(GL_TRIANGLE_FAN, 0, 4);

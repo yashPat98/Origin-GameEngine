@@ -18,7 +18,7 @@ namespace origin
 			virtual GLuint screenTexture(void)	= 0;
 
 			// static member functions
-			static OriginMSAA* CreateMSAA(void);
+			static OriginMSAA* CreateMSAA(GLsizei width, GLsizei height, GLsizei samples);
 			static void DeleteMSAA(OriginMSAA* msaa);
 	};
 }

@@ -14,7 +14,7 @@ class Scene : public OriginApplication
         OpenGLBuffer       *cube_position_buffer;
         OpenGLBuffer       *cube_color_buffer;
         OpenGLTexture      *smiley_texture;
-        OpenGLFramebuffer  *framebuffer;
+        OriginMSAA         *msaa;
         OpenGLTexture      *fbo_texture;
         ScreenQuad         *screen;
 
@@ -109,43 +109,43 @@ void Scene::initialize(void)
         -1.0f, -1.0f, 1.0f
     };
 
-    const GLfloat cubeNormals[] =
+    const GLfloat cubeTexcoords[] =
     {
-        //near 
-        0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f,
+        //near
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
 
         //right
-        1.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
 
-        //far
-        0.0f, 0.0f, -1.0f,
-        0.0f, 0.0f, -1.0f,
-        0.0f, 0.0f, -1.0f,
-        0.0f, 0.0f, -1.0f,
+        //far 
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
 
         //left
-        -1.0f, 0.0f, 0.0f,
-        -1.0f, 0.0f, 0.0f,
-        -1.0f, 0.0f, 0.0f,
-        -1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
 
-        //top 
-        0.0f, 1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
+        //top
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
 
         //bottom
-        0.0f, -1.0f, 0.0f,
-        0.0f, -1.0f, 0.0f,
-        0.0f, -1.0f, 0.0f,
-        0.0f, -1.0f, 0.0f
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 0.0f,
     };
 
     // setup vao and vbo
@@ -154,12 +154,12 @@ void Scene::initialize(void)
     cube_color_buffer           = OpenGLBuffer::CreateBuffer();
 
     cube_position_buffer->setBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-    cube_color_buffer->setBufferData(GL_ARRAY_BUFFER, sizeof(cubeNormals), cubeNormals, GL_STATIC_DRAW);
+    cube_color_buffer->setBufferData(GL_ARRAY_BUFFER, sizeof(cubeTexcoords), cubeTexcoords, GL_STATIC_DRAW);
 
     cube->setVertexBuffer(cube_position_buffer);
     cube->setVertexAttribPointer(ORIGIN_ATTRIBUTE_POSITION, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     cube->setVertexBuffer(cube_color_buffer);
-    cube->setVertexAttribPointer(ORIGIN_ATTRIBUTE_NORMAL, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    cube->setVertexAttribPointer(ORIGIN_ATTRIBUTE_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 0, NULL);
 
     // opengl states
     glShadeModel(GL_SMOOTH);                  
@@ -181,19 +181,7 @@ void Scene::initialize(void)
     smiley_texture->setTextureParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     smiley_texture->loadTexture("textures/Smiley.png");
 
-    // framebuffer configurations
-    framebuffer = OpenGLFramebuffer::CreateFramebuffer();
-    fbo_texture = OpenGLTexture::CreateTexture(GL_TEXTURE_2D);
-
-    fbo_texture->setInternalFormat(GL_RGBA);
-    fbo_texture->setFormat(GL_RGBA);
-    fbo_texture->setSize(1920, 1080);
-    fbo_texture->loadTexture(NULL, GL_UNSIGNED_BYTE);
-    fbo_texture->setTextureParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    fbo_texture->setTextureParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    framebuffer->attach(GL_COLOR_ATTACHMENT0, fbo_texture);
-    framebuffer->attach(GL_DEPTH_STENCIL_ATTACHMENT, GL_DEPTH24_STENCIL8, 1920, 1080);
+    msaa = origin::OriginMSAA::CreateMSAA(1920, 1080, 8);
 
     // release shaders
     OpenGLShader::DeleteShader(vertexShader);
@@ -241,29 +229,20 @@ void Scene::render(void)
     mat4 viewMatrix(1.0f);
 
     //code
-    framebuffer->bind();
+    msaa->bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    blinnPhongModel->bind();
+    colored_shader->bind();
 
         modelMatrix = translate(modelMatrix, translation);
         modelMatrix = rotate(modelMatrix, radians(rotation.x), vec3(1.0f, 0.0f, 0.0f));
         modelMatrix = rotate(modelMatrix, radians(rotation.y), vec3(0.0f, 1.0f, 0.0f));
         modelMatrix = rotate(modelMatrix, radians(rotation.z), vec3(0.0f, 0.0f, 1.0f));
 
-        blinnPhongModel->setModelMatrix(modelMatrix);
-        blinnPhongModel->setViewMatrix(viewMatrix);
-        blinnPhongModel->setProjectionMatrix(projectionMatrix);
+        smiley_texture->bind(GL_TEXTURE0);
+        glUniform1i(textureUniform, 0);
 
-        blinnPhongModel->setLightAmbient(vec3(0.1f, 0.1f, 0.1f));
-        blinnPhongModel->setLightDiffuse(vec3(1.0f, 1.0f, 1.0f));
-        blinnPhongModel->setLightSpecular(vec3(1.0f, 1.0f, 1.0f));
-        blinnPhongModel->setLightPosition(vec4(100.0f, 100.0f, 100.0f, 1.0f));
-
-        blinnPhongModel->setMaterialAmbient(vec3(0.2f, 0.1f, 0.0f));
-        blinnPhongModel->setMaterialDiffuse(vec3(1.0f, 0.5f, 0.0f));
-        blinnPhongModel->setMaterialSpecular(vec3(1.0f, 0.5f, 0.0f));
-        blinnPhongModel->setMaterialShininess(128.0f);
+        glUniformMatrix4fv(mvpMatrixUniform, 1, GL_FALSE, &(projectionMatrix * viewMatrix * modelMatrix)[0][0]);
 
         cube->drawArrays(GL_TRIANGLE_FAN, 0, 4);
         cube->drawArrays(GL_TRIANGLE_FAN, 4, 4);
@@ -272,13 +251,13 @@ void Scene::render(void)
         cube->drawArrays(GL_TRIANGLE_FAN, 16, 4);
         cube->drawArrays(GL_TRIANGLE_FAN, 20, 4);
 
-    blinnPhongModel->unbind();
-    framebuffer->unbind();
+    colored_shader->unbind();
+    msaa->unbind();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glViewport(0, 0, 1920, 1080);
 
-    screen->renderToScreen(fbo_texture);
-
+    screen->renderToScreen(msaa->screenTexture());
 }
 
 void Scene::update(void)
@@ -308,7 +287,7 @@ void Scene::uninitialize(void)
     delete (screen);
     delete (fbo_texture);
     BlinnPhongModel::DeleteBlinnPhongModel(blinnPhongModel);
-    OpenGLFramebuffer::DeleteFramebuffer(framebuffer);
+    OriginMSAA::DeleteMSAA(msaa);
     OpenGLProgram::DeleteProgram(colored_shader);
     OpenGLTexture::DeleteTexture(smiley_texture);
     OpenGLBuffer::DeleteBuffer(cube_position_buffer);

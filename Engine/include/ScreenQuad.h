@@ -14,6 +14,7 @@ namespace origin
 
 			// non-static member functions
 			virtual void renderToScreen(OpenGLTexture* texture) = 0;
+			virtual void renderToScreen(GLuint texture) = 0;
 
 			// static member functions
 			static ScreenQuad* CreateScreenQuad(void);

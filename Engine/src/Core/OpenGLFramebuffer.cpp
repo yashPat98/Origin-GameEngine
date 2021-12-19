@@ -43,7 +43,7 @@ Framebuffer::~Framebuffer(void)
 {
     // code
     glDeleteFramebuffers(1, &m_framebufferObject);
-    glDeleteRenderbuffers(attachments.size(), attachments.data());
+    glDeleteRenderbuffers((GLsizei)attachments.size(), attachments.data());
 }
 
 void Framebuffer::attach(GLenum attachment, origin::OpenGLTexture* texture)

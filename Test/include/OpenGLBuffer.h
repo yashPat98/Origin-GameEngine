@@ -7,7 +7,7 @@ namespace origin
     class OpenGLBuffer
     {
         public:
-            // constructors
+            // constructor
             OpenGLBuffer(void) { }
 
             // destructor

@@ -520,6 +520,9 @@
     <ClCompile Include="src\Graphics\ScreenQuad.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\MSAA.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\OriginResources.rc">

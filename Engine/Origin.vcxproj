@@ -305,6 +305,7 @@
     <ClCompile Include="src\Core\OriginApplication.cpp" />
     <ClCompile Include="src\Core\OriginLogger.cpp" />
     <ClCompile Include="src\Graphics\BlinnPhongModel.cpp" />
+    <ClCompile Include="src\Graphics\MSAA.cpp" />
     <ClCompile Include="src\Graphics\ScreenQuad.cpp" />
     <ClCompile Include="src\Origin.cpp" />
   </ItemGroup>
